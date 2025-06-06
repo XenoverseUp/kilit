@@ -5,7 +5,7 @@ import { logger } from "hono/logger";
 const app = new Hono();
 app.use("*", logger());
 
-app.get("/test", (c) => c.json({ success: true }));
+app.get("/api/test", (c) => c.json({ success: true }));
 
 app.use("/dashboard/*", serveStatic({ root: "./www/dashboard/dist" }));
 app.get("/dashboard/*", serveStatic({ path: "./www/dashboard/dist/index.html" }));
