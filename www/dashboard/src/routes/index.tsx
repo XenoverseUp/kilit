@@ -20,6 +20,7 @@ function App() {
         Count: <span className="font-semibold">{count}</span>
       </button>
       <Link to="/about">To about</Link>
+      <a href="/api/logout">Logout</a>
     </div>
   )
 }
