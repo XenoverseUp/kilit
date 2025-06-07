@@ -8,8 +8,8 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ autoCodeSplitting: true }),
     tsconfigPaths(),
+    TanStackRouterVite({ autoCodeSplitting: true }),
     viteReact(),
     tailwindcss(),
   ],
