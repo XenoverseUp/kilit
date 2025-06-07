@@ -16,6 +16,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@kinde-oss/kinde-typescript-sdk": "^2.11.0",
     "hono": "^4.7.11",
     "zod": "^3.25.56"
   }
