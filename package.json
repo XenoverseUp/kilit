@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "start": "bun server/index.ts",
-    "dev": "bun --watch server/index.ts"
+    "dev": "bun --watch server/index.ts",
+    "build": "bun run build:landing && bun run build:dashboard",
+    "build:landing": "cd www/landing && bun run build",
+    "build:dashboard": "cd www/dashboard && bun run build"
   },
   "devDependencies": {
     "@types/bun": "latest"

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@landing/*": ["landing/src/*"],
+      "@dashboard/*": ["dashboard/src/*"],
+      "@server/*": ["../server/*"],
+      "@kilit/*": ["../packages/*"]
+    }
+  }
+}
