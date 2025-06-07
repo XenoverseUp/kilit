@@ -31,4 +31,4 @@ createRoot(rootElement).render(
   </StrictMode>,
 )
 
-reportWebVitals(console.log)
+// reportWebVitals(console.log)

@@ -1,7 +1,8 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
-import authRouter from "./routes/auth";
+import { authRouter } from "./routes/auth";
+import { redirectUnauthorized } from "@lib/kinde";
 
 const app = new Hono();
 app.use("*", logger());
@@ -10,10 +11,11 @@ app.use("*", logger());
 
 const apiRoutes = app
   .basePath("/api")
-  .get("/health", (c) => c.json({ success: true }))
-  .route("/", authRouter);
+  .route("/", authRouter)
+  .get("/health", (c) => c.json({ success: true }));
 
 /* CSR Dashboard */
+app.use("/dashboard/*", redirectUnauthorized);
 app.use("/dashboard/*", serveStatic({ root: "./www/dashboard/dist" }));
 app.get("/dashboard/*", serveStatic({ path: "./www/dashboard/dist/index.html" }));
 
