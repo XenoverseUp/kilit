@@ -9,8 +9,13 @@ export default defineConfig({
     server: {
       proxy: {
         "/api": {
+          target: "http://localhost:3000",
+          changeOrigin: false,
+          secure: false,
+        },
+        "/dashboard": {
           target: "http://localhost:5173",
-          changeOrigin: true,
+          changeOrigin: false,
           secure: false,
         },
       },

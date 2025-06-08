@@ -1,7 +1,6 @@
-import { db } from "@lib/db"
-import { users } from "@lib/db/schema"
 import { getUser, kindeClient, sessionManager } from "@lib/kinde"
-import { eq } from "drizzle-orm"
+import { upsertOrGetUser } from "@lib/utils/user"
+
 import { Hono } from "hono"
 
 export const authRouter = new Hono()
@@ -16,6 +15,7 @@ export const authRouter = new Hono()
   .get("/callback", async (c) => {
     const manager = sessionManager(c)
     const url = new URL(c.req.url)
+
     await kindeClient.handleRedirectToApp(manager, url)
 
     return c.redirect("/dashboard")
@@ -25,6 +25,7 @@ export const authRouter = new Hono()
     return c.redirect(logoutUrl.toString())
   })
   .get("/me", getUser, async (c) => {
-    const user = c.var.user
+    const user = await upsertOrGetUser(c.var.user)
+
     return c.json({ isAuthenticated: true, user })
   })
