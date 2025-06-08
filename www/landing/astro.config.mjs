@@ -1,6 +1,6 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "astro/config"
+import tsconfigPaths from "vite-tsconfig-paths"
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
     server: {
       proxy: {
         "/api": {
-          target: "http://localhost:3000",
+          target: "http://localhost:5173",
           changeOrigin: true,
           secure: false,
         },
@@ -20,4 +20,4 @@ export default defineConfig({
       outDir: "dist",
     },
   },
-});
+})
