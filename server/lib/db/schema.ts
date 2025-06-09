@@ -1,5 +1,28 @@
-import { pgTable, text, timestamp, jsonb, uuid, boolean } from "drizzle-orm/pg-core"
+import {
+  pgTable,
+  text,
+  timestamp,
+  jsonb,
+  uuid,
+  boolean,
+  pgEnum,
+  integer,
+} from "drizzle-orm/pg-core"
 import { sql, relations } from "drizzle-orm"
+
+export const fieldTypeEnum = pgEnum("field_type", [
+  "email",
+  "name",
+  "surname",
+  "age",
+  "custom",
+])
+
+export const answerTypeEnum = pgEnum("answer_type", [
+  "string",
+  "number",
+  "boolean",
+])
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(), // Kinde ID
@@ -8,6 +31,7 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   picture: text("picture"),
   createdAt: timestamp("created_at").defaultNow(),
+  preferences: jsonb("preferences").default({}),
 })
 
 export const groups = pgTable("groups", {
@@ -28,7 +52,9 @@ export const links = pgTable("links", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  groupId: uuid("group_id").references(() => groups.id, { onDelete: "cascade" }),
+  groupId: uuid("group_id").references(() => groups.id, {
+    onDelete: "cascade",
+  }),
   lockedUrl: text("locked_url").notNull(),
   redirectUrl: text("redirect_url").notNull(),
   expiresAt: timestamp("expires_at"),
@@ -45,23 +71,18 @@ export const formFields = pgTable("form_fields", {
     .references(() => links.id, { onDelete: "cascade" }),
 
   /** One of: email, name, surname, age, custom */
-  type: text("type", {
-    enum: ["email", "name", "surname", "age", "custom"],
-  }).notNull(),
+  type: fieldTypeEnum("field_type"),
 
   /** Required if type is 'custom' */
   question: text("question"),
 
-  /** Required if type is 'custom'; e.g., 'string', 'number', etc. */
-  answerType: text("answer_type", {
-    enum: ["string", "number", "boolean"],
-  }),
+  answerType: answerTypeEnum("answer_type"),
 
   /** Is this field required? */
   required: boolean("required").default(false),
 
   /** Optional order value to control rendering order */
-  order: text("order"),
+  displayOrder: integer("display_order"),
 })
 
 export const submissions = pgTable("submissions", {

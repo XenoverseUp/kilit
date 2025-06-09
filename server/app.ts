@@ -5,6 +5,7 @@ import { redirectUnauthorized } from "@lib/kinde"
 
 import { authRouter } from "./routes/auth"
 import { userRouter } from "./routes/user"
+import { healthRouter } from "./routes/health"
 
 const app = new Hono()
 app.use("*", logger())
@@ -15,12 +16,15 @@ const apiRoutes = app
   .basePath("/api")
   .route("/", authRouter)
   .route("/user", userRouter)
-  .get("/health", (c) => c.json({ success: true }))
+  .route("/health", healthRouter)
 
 /* CSR Dashboard */
 app.use("/dashboard/*", redirectUnauthorized)
 app.use("/dashboard/*", serveStatic({ root: "./www/dashboard/dist" }))
-app.get("/dashboard/*", serveStatic({ path: "./www/dashboard/dist/index.html" }))
+app.get(
+  "/dashboard/*",
+  serveStatic({ path: "./www/dashboard/dist/index.html" }),
+)
 
 /* SSG Landing */
 app.use("/*", serveStatic({ root: "./www/landing/dist" }))

@@ -3,25 +3,28 @@ import { db } from "@lib/db"
 import { users } from "@lib/db/schema"
 import { eq } from "drizzle-orm"
 
-export async function upsertOrGetUser(user: UserType) {
+export async function findOrCreateUser(user: UserType) {
   const existingUser = await db.query.users.findFirst({
     where: eq(users.id, user.id),
   })
 
-  if (!existingUser) {
-    const created = await db
-      .insert(users)
-      .values({
-        id: user.id,
-        email: user.email,
-        firstName: user.given_name ?? null,
-        lastName: user.family_name ?? null,
-        picture: user.picture ?? null,
-      })
-      .returning()
+  if (existingUser) return existingUser
 
-    return created[0]
-  }
+  const created = await db
+    .insert(users)
+    .values({
+      id: user.id,
+      email: user.email,
+      firstName: user.given_name ?? null,
+      lastName: user.family_name ?? null,
+      picture: user.picture ?? null,
+    })
+    .onConflictDoNothing()
+    .returning()
 
-  return existingUser
+  if (created.length > 0) return created[0]
+
+  return await db.query.users.findFirst({
+    where: eq(users.id, user.id),
+  })
 }
