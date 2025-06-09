@@ -6,10 +6,10 @@ import {
   uuid,
   boolean,
   pgEnum,
-  integer,
 } from "drizzle-orm/pg-core"
 import { sql, relations } from "drizzle-orm"
 
+// Enums
 export const fieldTypeEnum = pgEnum("field_type", [
   "email",
   "name",
@@ -24,6 +24,12 @@ export const answerTypeEnum = pgEnum("answer_type", [
   "boolean",
 ])
 
+export const verificationModeEnum = pgEnum("verification_mode", [
+  "none",
+  "email",
+])
+
+// Users
 export const users = pgTable("users", {
   id: text("id").primaryKey(), // Kinde ID
   email: text("email").notNull(),
@@ -31,20 +37,10 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   picture: text("picture"),
   createdAt: timestamp("created_at").defaultNow(),
-  preferences: jsonb("preferences").default({}),
+  preferences: jsonb("preferences").$type<{}>().default({}),
 })
 
-export const groups = pgTable("groups", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`gen_random_uuid()`),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  name: text("name"),
-  createdAt: timestamp("created_at").defaultNow(),
-})
-
+// Links
 export const links = pgTable("links", {
   id: uuid("id")
     .primaryKey()
@@ -52,39 +48,34 @@ export const links = pgTable("links", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  groupId: uuid("group_id").references(() => groups.id, {
-    onDelete: "cascade",
-  }),
+
   lockedUrl: text("locked_url").notNull(),
   redirectUrl: text("redirect_url").notNull(),
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").defaultNow(),
+
+  title: text("title"),
+  description: text("description"),
+  isActive: boolean("is_active").default(true),
+
+  verificationMode: verificationModeEnum("verification_mode").default("none"),
+
+  formDefinition: jsonb("form_definition")
+    .$type<
+      {
+        id: string
+        type: (typeof fieldTypeEnum.enumValues)[number]
+        answerType?: (typeof answerTypeEnum.enumValues)[number]
+        label?: string
+        question?: string
+        required?: boolean
+        displayOrder?: number
+      }[]
+    >()
+    .notNull(),
 })
 
-export const formFields = pgTable("form_fields", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`gen_random_uuid()`),
-
-  linkId: uuid("link_id")
-    .notNull()
-    .references(() => links.id, { onDelete: "cascade" }),
-
-  /** One of: email, name, surname, age, custom */
-  type: fieldTypeEnum("field_type"),
-
-  /** Required if type is 'custom' */
-  question: text("question"),
-
-  answerType: answerTypeEnum("answer_type"),
-
-  /** Is this field required? */
-  required: boolean("required").default(false),
-
-  /** Optional order value to control rendering order */
-  displayOrder: integer("display_order"),
-})
-
+// Submissions
 export const submissions = pgTable("submissions", {
   id: uuid("id")
     .primaryKey()
@@ -92,22 +83,18 @@ export const submissions = pgTable("submissions", {
   linkId: uuid("link_id")
     .notNull()
     .references(() => links.id, { onDelete: "cascade" }),
+
   submittedAt: timestamp("submitted_at").defaultNow(),
-  data: jsonb("data").notNull(), // { email: "xx", name: "yy", ... }
+  verified: boolean("verified").default(false),
+
+  answers: jsonb("answers")
+    .$type<Record<string, string | number | boolean>>()
+    .notNull(),
 })
 
 /** Relations */
 
 export const userRelations = relations(users, ({ many }) => ({
-  groups: many(groups),
-  links: many(links),
-}))
-
-export const groupRelations = relations(groups, ({ one, many }) => ({
-  user: one(users, {
-    fields: [groups.userId],
-    references: [users.id],
-  }),
   links: many(links),
 }))
 
@@ -116,19 +103,7 @@ export const linkRelations = relations(links, ({ one, many }) => ({
     fields: [links.userId],
     references: [users.id],
   }),
-  group: one(groups, {
-    fields: [links.groupId],
-    references: [groups.id],
-  }),
-  formFields: many(formFields),
   submissions: many(submissions),
-}))
-
-export const formFieldRelations = relations(formFields, ({ one }) => ({
-  link: one(links, {
-    fields: [formFields.linkId],
-    references: [links.id],
-  }),
 }))
 
 export const submissionRelations = relations(submissions, ({ one }) => ({
