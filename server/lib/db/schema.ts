@@ -9,21 +9,6 @@ import {
 } from "drizzle-orm/pg-core"
 import { sql, relations } from "drizzle-orm"
 
-// Enums
-export const fieldTypeEnum = pgEnum("field_type", [
-  "email",
-  "name",
-  "surname",
-  "age",
-  "custom",
-])
-
-export const answerTypeEnum = pgEnum("answer_type", [
-  "string",
-  "number",
-  "boolean",
-])
-
 export const verificationModeEnum = pgEnum("verification_mode", [
   "none",
   "email",
@@ -56,7 +41,6 @@ export const links = pgTable("links", {
 
   title: text("title"),
   description: text("description"),
-  isActive: boolean("is_active").default(true),
 
   verificationMode: verificationModeEnum("verification_mode").default("none"),
 
@@ -64,10 +48,9 @@ export const links = pgTable("links", {
     .$type<
       {
         id: string
-        type: (typeof fieldTypeEnum.enumValues)[number]
-        answerType?: (typeof answerTypeEnum.enumValues)[number]
+        type: "email" | "name" | "surname" | "age"
+        answerType: "email" | "integer" | "string"
         label?: string
-        question?: string
         required?: boolean
         displayOrder?: number
       }[]

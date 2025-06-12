@@ -3,12 +3,14 @@ import { db } from "@lib/db"
 import { getUser } from "@lib/kinde"
 import { findOrCreateUser } from "@lib/utils/user"
 import {
+  bCreateLinkValidator,
   pGetSingleLinkValidator,
   qCreatePreferencesValidator,
 } from "@lib/validators/user"
 import { and, eq, sql } from "drizzle-orm"
 
 import { Hono } from "hono"
+import { resolveExpiresAt } from "@lib/utils/links"
 
 export const userRouter = new Hono()
   .use(getUser)
@@ -45,13 +47,13 @@ export const userRouter = new Hono()
    * Locked Links
    */
 
+  // !TODO: Apply pagination to getLinks.
   .get("/links", async c => {
     const links = await db
       .select({
         id: schema.links.id,
         title: schema.links.title,
         description: schema.links.description,
-        isActive: schema.links.isActive,
         verificationMode: schema.links.verificationMode,
         createdAt: schema.links.createdAt,
       })
@@ -59,6 +61,27 @@ export const userRouter = new Hono()
       .where(eq(schema.links.userId, c.var.user.id))
 
     return c.json(links)
+  })
+  .post("/links", bCreateLinkValidator, async c => {
+    const { user } = c.var
+    const body = c.req.valid("json")
+
+    const redirectUrl = generateRedirectUrl()
+
+    const expiresAt = resolveExpiresAt(body.expiresAt, body.expiresIn)
+
+    await db.insert(schema.links).values({
+      userId: user.id,
+      lockedUrl: body.lockedUrl,
+      redirectUrl,
+      expiresAt,
+      title: body.title,
+      description: body.description,
+      verificationMode: body.verificationMode,
+      formDefinition: body.formDefinition,
+    })
+
+    return c.json({ message: "Locked link successfully." }, 201)
   })
 
   .get("/links/:id", pGetSingleLinkValidator, async c => {
