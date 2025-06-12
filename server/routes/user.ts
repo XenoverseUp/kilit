@@ -10,7 +10,8 @@ import {
 import { and, eq, sql } from "drizzle-orm"
 
 import { Hono } from "hono"
-import { resolveExpiresAt } from "@lib/utils/links"
+import { generateRedirectUrl, resolveExpiresAt } from "@lib/utils/links"
+import { attempt } from "@lib/utils/common"
 
 export const userRouter = new Hono()
   .use(getUser)
@@ -62,26 +63,46 @@ export const userRouter = new Hono()
 
     return c.json(links)
   })
+
   .post("/links", bCreateLinkValidator, async c => {
     const { user } = c.var
     const body = c.req.valid("json")
 
-    const redirectUrl = generateRedirectUrl()
+    const result = await attempt(generateRedirectUrl(process.env.BASE_URL))
+
+    if (!result.success)
+      return c.json(
+        {
+          message: "Failed to create a unique locked link.",
+        },
+        500,
+      )
+
+    const redirectUrl = result.value
 
     const expiresAt = resolveExpiresAt(body.expiresAt, body.expiresIn)
 
-    await db.insert(schema.links).values({
-      userId: user.id,
-      lockedUrl: body.lockedUrl,
-      redirectUrl,
-      expiresAt,
-      title: body.title,
-      description: body.description,
-      verificationMode: body.verificationMode,
-      formDefinition: body.formDefinition,
-    })
+    const [link] = await db
+      .insert(schema.links)
+      .values({
+        userId: user.id,
+        lockedUrl: body.lockedUrl,
+        redirectUrl,
+        expiresAt,
+        title: body.title,
+        description: body.description,
+        verificationMode: body.verificationMode,
+        formDefinition: body.formDefinition,
+      })
+      .returning()
 
-    return c.json({ message: "Locked link successfully." }, 201)
+    return c.json(
+      {
+        message: "Locked link created successfully.",
+        link,
+      },
+      201,
+    )
   })
 
   .get("/links/:id", pGetSingleLinkValidator, async c => {

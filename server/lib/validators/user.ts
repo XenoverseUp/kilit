@@ -1,6 +1,5 @@
 import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
-import { uuid } from "zod/v4"
 
 /**
  * PREFIXES
