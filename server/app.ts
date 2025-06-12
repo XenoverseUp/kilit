@@ -2,10 +2,13 @@ import { Hono } from "hono"
 import { serveStatic } from "hono/bun"
 import { logger } from "hono/logger"
 import { redirectUnauthorized } from "@lib/kinde"
+import { getGeolocation, initGeoDB } from "@lib/geolocation"
 
 import { authRouter } from "./routes/auth"
 import { userRouter } from "./routes/user"
 import { healthRouter } from "./routes/health"
+
+await initGeoDB("server/data/geolite-city/GeoLite2-City.mmdb")
 
 const app = new Hono()
 app.use("*", logger())
@@ -15,6 +18,7 @@ app.use("*", logger())
 const apiRoutes = app
   .basePath("/api")
   .route("/", authRouter)
+  .get("/location", getGeolocation, c => c.json(c.var))
   .route("/user", userRouter)
   .route("/health", healthRouter)
 
