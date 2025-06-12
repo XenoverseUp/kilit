@@ -14,11 +14,10 @@ const app = new Hono()
 app.use("*", logger())
 
 /* API Routes */
-
 const apiRoutes = app
   .basePath("/api")
-  .route("/", authRouter)
   .get("/location", getGeolocation, c => c.json(c.var))
+  .route("/", authRouter)
   .route("/user", userRouter)
   .route("/health", healthRouter)
 
@@ -28,6 +27,15 @@ app.use("/dashboard/*", serveStatic({ root: "./www/dashboard/dist" }))
 app.get(
   "/dashboard/*",
   serveStatic({ path: "./www/dashboard/dist/index.html" }),
+)
+
+/* Static Public Directory */
+app.use(
+  "/public/*",
+  serveStatic({
+    root: "./public",
+    rewriteRequestPath: path => path.replace("/public", ""),
+  }),
 )
 
 /* SSG Landing */

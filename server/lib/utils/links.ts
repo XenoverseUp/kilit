@@ -3,7 +3,10 @@ import { customAlphabet } from "nanoid"
 import * as schema from "@lib/db/schema"
 import { eq } from "drizzle-orm"
 
-export const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 8)
+export const nanoid = customAlphabet(
+  "1234567890abcdefghijklmnopqrstuvwxyz",
+  +(process.env.LINK_LENGTH ?? 8),
+)
 
 export function resolveExpiresAt(
   expiresAt?: string,

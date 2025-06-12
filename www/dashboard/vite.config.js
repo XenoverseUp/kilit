@@ -25,7 +25,7 @@ export default defineConfig({
       },
     },
   },
-  base: '/dashboard',
+  base: 'dashboard',
   build: {
     outDir: 'dist/dashboard',
   },
