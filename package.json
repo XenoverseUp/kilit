@@ -5,12 +5,13 @@
   "scripts": {
     "start": "NODE_ENV=production bun server/index.ts",
     "dev": "NODE_ENV=development bun --watch server/index.ts",
-    "build": "bun run build:landing && bun run build:dashboard",
+    "build": "bun run install:geolocation && bun run build:landing && bun run build:dashboard",
     "build:landing": "cd www/landing && bun run build",
     "build:dashboard": "cd www/dashboard && bun run build",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "db:push": "npx drizzle-kit push"
+    "db:push": "npx drizzle-kit push",
+    "install:geolocation": "bun run scripts/setup-geolocation.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
