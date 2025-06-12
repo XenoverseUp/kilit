@@ -13,6 +13,8 @@ import { Hono } from "hono"
 import { generateRedirectUrl, resolveExpiresAt } from "@lib/utils/links"
 import { attempt } from "@lib/utils/common"
 
+// !TODO: Improve error handling with `attempt`.
+
 export const userRouter = new Hono()
   .use(getUser)
 
