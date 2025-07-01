@@ -6,19 +6,14 @@ export async function findOrCreateUser(
   user: UserType,
   createPreferences?: Record<string, unknown>,
 ) {
-  const existingUser = await db.query.users.findFirst({
-    where: ({ id }, { eq }) => eq(id, user.id),
-  })
-
+  const existingUser = await retrieveUser(user.id)
   if (existingUser) return existingUser
 
   const created = await createUser(user, createPreferences)
 
   if (created.length > 0) return created[0]
 
-  return await db.query.users.findFirst({
-    where: ({ id }, { eq }) => eq(id, user.id),
-  })
+  return await retrieveUser(user.id)
 }
 
 export async function createUser(
@@ -37,4 +32,12 @@ export async function createUser(
     })
     .onConflictDoNothing()
     .returning()
+}
+
+export async function retrieveUser(userId: string) {
+  const existingUser = await db.query.users.findFirst({
+    where: ({ id }, { eq }) => eq(id, userId),
+  })
+
+  return existingUser ?? null
 }

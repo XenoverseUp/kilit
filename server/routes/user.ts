@@ -1,7 +1,7 @@
 import * as schema from "@lib/db/schema"
 import { db } from "@lib/db"
 import { getUser } from "@lib/kinde"
-import { findOrCreateUser } from "@lib/utils/user"
+import { findOrCreateUser, retrieveUser } from "@lib/utils/user"
 import {
   bCreateLinkValidator,
   pGetSingleLinkValidator,
@@ -23,7 +23,7 @@ export const userRouter = new Hono()
    */
 
   .get("/preferences", async c => {
-    const user = await findOrCreateUser(c.var.user, {})
+    const user = await retrieveUser(c.var.user.id)
     return c.json(user?.preferences ?? {})
   })
 
@@ -40,8 +40,6 @@ export const userRouter = new Hono()
       })
       .where(eq(schema.users.id, c.var.user.id))
       .returning({ updatedId: schema.users.id })
-
-    if (!result.length) await findOrCreateUser(c.var.user, query)
 
     return c.json({ message: "Preferences updated." }, 201)
   })

@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Server",
+    "alias": "server",
+    "command": "bun",
+    "args": ["run", "dev"],
+    "cwd": "."
+  },
+  {
+    "label": "DB Studio",
+    "alias": "drizzle-studio",
+    "command": "bunx",
+    "args": ["drizzle-kit", "studio"],
+    "cwd": "."
+  },
+  {
+    "label": "Landing",
+    "alias": "landing",
+    "command": "bun",
+    "args": ["run", "dev"],
+    "cwd": "www/landing"
+  },
+  {
+    "label": "Dashboard",
+    "alias": "dashboard",
+    "command": "bun",
+    "args": ["run", "dev"],
+    "cwd": "www/dashboard"
+  }
+]
