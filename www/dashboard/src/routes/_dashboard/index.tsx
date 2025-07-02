@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { userQueryOptions } from '@/lib/api'
+import { Button } from '@/components/ui/button'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_dashboard/')({
   component: App,
 })
 
@@ -16,20 +17,17 @@ function App() {
   if (error) return <div>An Error occured</div>
 
   return (
-    <div className="text-center">
+    <div className="text-center px-4 space-y-4">
       <h1 className="text-2xl mt-8 font-semibold text-center">
         Hello from the Dashboard App!
       </h1>
-      <button
-        className="px-4 mt-4 py-2 bg-neutral-900 text-white select-none cursor-pointer"
-        onClick={() => setCount(count + 1)}
-      >
+      <Button variant="secondary" onClick={() => setCount(count + 1)}>
         Count: <span className="font-semibold">{count}</span>
-      </button>
+      </Button>
 
-      <pre className="text-start">{JSON.stringify(data.user, null, 2)}</pre>
-
-      <a href="/api/logout">Logout</a>
+      <Button asChild variant="link">
+        <a href="/api/logout">Logout</a>
+      </Button>
     </div>
   )
 }
