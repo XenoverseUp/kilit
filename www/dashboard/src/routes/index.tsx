@@ -1,5 +1,7 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { userQueryOptions } from '@/lib/api'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -7,6 +9,11 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const { isPending, error, data } = useQuery(userQueryOptions)
+
+  if (isPending) return <div>Loading...</div>
+  if (error) return <div>An Error occured</div>
 
   return (
     <div className="text-center">
@@ -19,7 +26,9 @@ function App() {
       >
         Count: <span className="font-semibold">{count}</span>
       </button>
-      <Link to="/about">To about</Link>
+
+      <pre className="text-start">{JSON.stringify(data.user, null, 2)}</pre>
+
       <a href="/api/logout">Logout</a>
     </div>
   )

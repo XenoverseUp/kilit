@@ -1,6 +1,7 @@
+import type { UserType } from "@kinde-oss/kinde-typescript-sdk"
 import { getUser, kindeClient, sessionManager } from "@lib/kinde"
 import { attempt } from "@lib/utils/common"
-import { findOrCreateUser } from "@lib/utils/user"
+import { findOrCreateUser, retrieveUser } from "@lib/utils/user"
 
 import { Hono } from "hono"
 
@@ -40,6 +41,29 @@ export const authRouter = new Hono()
 
   /* Get Authenticated User */
   .get("/me", getUser, async c => {
-    const user = await findOrCreateUser(c.var.user)
-    return c.json({ isAuthenticated: true, user })
+    const user = await retrieveUser(c.var.user.id)
+
+    if (!user)
+      return c.json(
+        {
+          isAuthenticated: false,
+        },
+        401,
+      )
+
+    return c.json({
+      isAuthenticated: true,
+      user,
+    } as unknown as {
+      isAuthenticated: boolean
+      user: {
+        id: string
+        email: string
+        firstName: string | null
+        lastName: string | null
+        picture: string | null
+        createdAt: Date
+        preferences: Record<string, unknown> | null
+      }
+    })
   })

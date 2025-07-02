@@ -1,7 +1,7 @@
 import * as schema from "@lib/db/schema"
 import { db } from "@lib/db"
 import { getUser } from "@lib/kinde"
-import { findOrCreateUser, retrieveUser } from "@lib/utils/user"
+import { retrieveUser } from "@lib/utils/user"
 import {
   bCreateLinkValidator,
   pGetSingleLinkValidator,

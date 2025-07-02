@@ -7,6 +7,7 @@ import { getGeolocation, initGeoDB } from "@lib/geolocation"
 import { authRouter } from "./routes/auth"
 import { userRouter } from "./routes/user"
 import { healthRouter } from "./routes/health"
+import { linkRouter } from "./routes/link"
 
 await initGeoDB("server/data/geolite-city/GeoLite2-City.mmdb")
 
@@ -18,6 +19,7 @@ const apiRoutes = app
   .basePath("/api")
   .get("/location", getGeolocation, c => c.json(c.var))
   .route("/", authRouter)
+  .route("/", linkRouter)
   .route("/user", userRouter)
   .route("/health", healthRouter)
 
