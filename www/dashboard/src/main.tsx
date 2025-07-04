@@ -29,11 +29,9 @@ declare module '@tanstack/react-router' {
 const rootElement = document.getElementById('app')!
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </StrictMode>,
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>,
 )
 
 // reportWebVitals(console.log)

@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_dashboard/')({
 function App() {
   const [count, setCount] = useState(0)
 
-  const { isPending, error, data } = useQuery(userQueryOptions)
+  const { isPending, error } = useQuery(userQueryOptions)
 
   if (isPending) return <div>Loading...</div>
   if (error) return <div>An Error occured</div>
