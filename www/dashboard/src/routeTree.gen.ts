@@ -13,6 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardImport } from './routes/_dashboard'
 import { Route as DashboardIndexImport } from './routes/_dashboard/index'
+import { Route as DashboardSettingsImport } from './routes/_dashboard/settings'
+import { Route as DashboardFormsImport } from './routes/_dashboard/forms'
+import { Route as DashboardAutomationImport } from './routes/_dashboard/automation'
 import { Route as DashboardAnalyticsImport } from './routes/_dashboard/analytics'
 import { Route as DashboardAboutImport } from './routes/_dashboard/about'
 
@@ -26,6 +29,24 @@ const DashboardRoute = DashboardImport.update({
 const DashboardIndexRoute = DashboardIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardSettingsRoute = DashboardSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardFormsRoute = DashboardFormsImport.update({
+  id: '/forms',
+  path: '/forms',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardAutomationRoute = DashboardAutomationImport.update({
+  id: '/automation',
+  path: '/automation',
   getParentRoute: () => DashboardRoute,
 } as any)
 
@@ -66,6 +87,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAnalyticsImport
       parentRoute: typeof DashboardImport
     }
+    '/_dashboard/automation': {
+      id: '/_dashboard/automation'
+      path: '/automation'
+      fullPath: '/automation'
+      preLoaderRoute: typeof DashboardAutomationImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/forms': {
+      id: '/_dashboard/forms'
+      path: '/forms'
+      fullPath: '/forms'
+      preLoaderRoute: typeof DashboardFormsImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/settings': {
+      id: '/_dashboard/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof DashboardSettingsImport
+      parentRoute: typeof DashboardImport
+    }
     '/_dashboard/': {
       id: '/_dashboard/'
       path: '/'
@@ -81,12 +123,18 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteChildren {
   DashboardAboutRoute: typeof DashboardAboutRoute
   DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
+  DashboardAutomationRoute: typeof DashboardAutomationRoute
+  DashboardFormsRoute: typeof DashboardFormsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAboutRoute: DashboardAboutRoute,
   DashboardAnalyticsRoute: DashboardAnalyticsRoute,
+  DashboardAutomationRoute: DashboardAutomationRoute,
+  DashboardFormsRoute: DashboardFormsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
@@ -98,12 +146,18 @@ export interface FileRoutesByFullPath {
   '': typeof DashboardRouteWithChildren
   '/about': typeof DashboardAboutRoute
   '/analytics': typeof DashboardAnalyticsRoute
+  '/automation': typeof DashboardAutomationRoute
+  '/forms': typeof DashboardFormsRoute
+  '/settings': typeof DashboardSettingsRoute
   '/': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/about': typeof DashboardAboutRoute
   '/analytics': typeof DashboardAnalyticsRoute
+  '/automation': typeof DashboardAutomationRoute
+  '/forms': typeof DashboardFormsRoute
+  '/settings': typeof DashboardSettingsRoute
   '/': typeof DashboardIndexRoute
 }
 
@@ -112,19 +166,32 @@ export interface FileRoutesById {
   '/_dashboard': typeof DashboardRouteWithChildren
   '/_dashboard/about': typeof DashboardAboutRoute
   '/_dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/_dashboard/automation': typeof DashboardAutomationRoute
+  '/_dashboard/forms': typeof DashboardFormsRoute
+  '/_dashboard/settings': typeof DashboardSettingsRoute
   '/_dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/about' | '/analytics' | '/'
+  fullPaths:
+    | ''
+    | '/about'
+    | '/analytics'
+    | '/automation'
+    | '/forms'
+    | '/settings'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/analytics' | '/'
+  to: '/about' | '/analytics' | '/automation' | '/forms' | '/settings' | '/'
   id:
     | '__root__'
     | '/_dashboard'
     | '/_dashboard/about'
     | '/_dashboard/analytics'
+    | '/_dashboard/automation'
+    | '/_dashboard/forms'
+    | '/_dashboard/settings'
     | '/_dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -155,6 +222,9 @@ export const routeTree = rootRoute
       "children": [
         "/_dashboard/about",
         "/_dashboard/analytics",
+        "/_dashboard/automation",
+        "/_dashboard/forms",
+        "/_dashboard/settings",
         "/_dashboard/"
       ]
     },
@@ -164,6 +234,18 @@ export const routeTree = rootRoute
     },
     "/_dashboard/analytics": {
       "filePath": "_dashboard/analytics.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/automation": {
+      "filePath": "_dashboard/automation.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/forms": {
+      "filePath": "_dashboard/forms.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/settings": {
+      "filePath": "_dashboard/settings.tsx",
       "parent": "/_dashboard"
     },
     "/_dashboard/": {

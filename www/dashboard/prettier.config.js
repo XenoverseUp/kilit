@@ -6,7 +6,10 @@ const config = {
   singleQuote: true,
   trailingComma: 'all',
 
-  plugins: ['prettier-plugin-tailwindcss'],
+  plugins: [
+    'prettier-plugin-tailwindcss',
+    '@trivago/prettier-plugin-sort-imports',
+  ],
 }
 
 export default config

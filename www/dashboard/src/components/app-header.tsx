@@ -1,5 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import AuthInfo from './auth-info'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,15 +8,19 @@ import {
 } from './ui/breadcrumb'
 import { SidebarTrigger, useSidebar } from './ui/sidebar'
 import { useBreadcrumbs } from '@/hooks/use-breadcrumbs'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { Link } from '@tanstack/react-router'
+import { Fragment } from 'react'
 
 export default function AppHeader() {
   const { open } = useSidebar()
+  const isMobile = useIsMobile()
   const crumbs = useBreadcrumbs()
 
   return (
-    <header className="bg-background sticky top-0 flex h-12 items-center justify-between px-4">
+    <header className="bg-background sticky top-0 flex h-16 items-center justify-between px-4">
       <div className="flex items-center gap-2">
-        {!open && <SidebarTrigger />}
+        {(!open || isMobile) && <SidebarTrigger />}
 
         <Breadcrumb>
           <BreadcrumbList>
@@ -34,6 +37,7 @@ export default function AppHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
+      <AuthInfo />
     </header>
   )
 }

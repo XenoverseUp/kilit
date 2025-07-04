@@ -13,6 +13,18 @@ const urlMap: Record<string, { title: string; url: string }> = {
     title: 'Analytics',
     url: '/analytics',
   },
+  forms: {
+    title: 'Form Builder',
+    url: '/forms',
+  },
+  automation: {
+    title: 'Automation',
+    url: '/automation',
+  },
+  settings: {
+    title: 'Settings',
+    url: '/settings',
+  },
 }
 
 function getPaths(pathname: string) {

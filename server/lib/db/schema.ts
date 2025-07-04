@@ -17,10 +17,6 @@ export const verificationModeEnum = pgEnum("verification_mode", [
 // Users
 export const users = pgTable("users", {
   id: text("id").primaryKey(), // Kinde ID
-  email: text("email").notNull(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  picture: text("picture"),
   createdAt: timestamp("created_at").defaultNow(),
   preferences: jsonb("preferences").$type<{}>().default({}),
 })

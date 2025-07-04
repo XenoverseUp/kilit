@@ -3,38 +3,34 @@ import { db } from "@lib/db"
 import { users } from "@lib/db/schema"
 
 export async function findOrCreateUser(
-  user: UserType,
+  id: UserType["id"],
   createPreferences?: Record<string, unknown>,
 ) {
-  const existingUser = await retrieveUser(user.id)
+  const existingUser = await retrieveUser(id)
   if (existingUser) return existingUser
 
-  const created = await createUser(user, createPreferences)
+  const created = await createUser(id, createPreferences)
 
   if (created.length > 0) return created[0]
 
-  return await retrieveUser(user.id)
+  return await retrieveUser(id)
 }
 
 export async function createUser(
-  user: UserType,
+  id: UserType["id"],
   preferences?: Record<string, unknown>,
 ) {
   return await db
     .insert(users)
     .values({
-      id: user.id,
-      email: user.email,
-      firstName: user.given_name ?? null,
-      lastName: user.family_name ?? null,
-      picture: user.picture ?? null,
+      id,
       preferences: preferences ?? {},
     })
     .onConflictDoNothing()
     .returning()
 }
 
-export async function retrieveUser(userId: string) {
+export async function retrieveUser(userId: UserType["id"]) {
   const existingUser = await db.query.users.findFirst({
     where: ({ id }, { eq }) => eq(id, userId),
   })

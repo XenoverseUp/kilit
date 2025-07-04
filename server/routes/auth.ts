@@ -26,9 +26,9 @@ export const authRouter = new Hono()
     await kindeClient.handleRedirectToApp(manager, url)
     const result = await attempt(kindeClient.getUser(manager))
 
-    if (!result.success) return c.redirect("/login")
+    if (!result.success || !result.value.id) return c.redirect("/login")
 
-    await findOrCreateUser(result.value)
+    await findOrCreateUser(result.value.id)
 
     return c.redirect("/dashboard")
   })
@@ -41,29 +41,23 @@ export const authRouter = new Hono()
 
   /* Get Authenticated User */
   .get("/me", getUser, async c => {
-    const user = await retrieveUser(c.var.user.id)
-
-    if (!user)
-      return c.json(
-        {
-          isAuthenticated: false,
-        },
-        401,
-      )
-
     return c.json({
       isAuthenticated: true,
-      user,
+      user: {
+        id: c.var.user.id,
+        email: c.var.user.email,
+        firstName: c.var.user.given_name,
+        lastName: c.var.user.family_name,
+        picture: c.var.user.picture,
+      },
     } as unknown as {
       isAuthenticated: boolean
       user: {
         id: string
-        email: string
+        email: string | null
         firstName: string | null
         lastName: string | null
         picture: string | null
-        createdAt: Date
-        preferences: Record<string, unknown> | null
       }
     })
   })
