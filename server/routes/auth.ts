@@ -30,7 +30,7 @@ export const authRouter = new Hono()
 
     await findOrCreateUser(result.value.id)
 
-    return c.redirect("/dashboard")
+    return c.redirect("/dashboard/")
   })
 
   /* Log Out */
