@@ -5,15 +5,16 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-} from '@/components/ui/sidebar'
-import { Link } from '@tanstack/react-router'
-import For from 'common/for'
-import { If } from 'common/if'
+} from "@/components/ui/sidebar"
+import { Link } from "@tanstack/react-router"
+import For from "common/for"
+import { If } from "common/if"
 import {
   ChartNoAxesColumn,
   Cuboid,
@@ -24,62 +25,62 @@ import {
   Settings,
   Shield,
   Workflow,
-} from 'lucide-react'
+} from "lucide-react"
 
 const menuConfig = [
   {
-    label: 'General',
+    label: "General",
     items: [
       {
-        to: '/',
+        to: "/",
         icon: Home,
-        text: 'Dashboard',
+        text: "Dashboard",
       },
       {
-        to: '/about',
+        to: "/about",
         icon: Link2,
-        text: 'Locked Links',
+        text: "Locked Links",
         badge: 5,
       },
       {
-        to: '/analytics',
+        to: "/analytics",
         icon: ChartNoAxesColumn,
-        text: 'Analytics',
+        text: "Analytics",
       },
     ],
   },
   {
-    label: 'Tools',
+    label: "Tools",
     items: [
       {
-        to: '/forms',
+        to: "/forms",
         icon: LetterText,
-        text: 'Forms',
+        text: "Forms",
       },
       {
-        to: '/automation',
+        to: "/automation",
         icon: Workflow,
-        text: 'Automation',
+        text: "Automation",
       },
     ],
   },
   {
-    label: 'Support',
+    label: "Support",
     items: [
       {
-        to: '/settings',
+        to: "/settings",
         icon: Settings,
-        text: 'Settings',
+        text: "Settings",
       },
       {
-        to: '/security',
+        to: "/security",
         icon: Shield,
-        text: 'Security',
+        text: "Security",
       },
       {
-        to: '/help',
+        to: "/help",
         icon: HelpCircle,
-        text: 'Help',
+        text: "Help",
       },
     ],
   },
@@ -89,17 +90,17 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
-        <header className="flex h-16 shrink-0 items-center justify-between pr-4 pl-6">
-          <div className="text-brand flex items-center gap-1">
+        <SidebarHeader className="flex h-16 shrink-0 items-center justify-between pr-4 pl-6">
+          <div className="flex items-center gap-1">
             <Cuboid size={20} />
             <h1 className="text-lg font-medium">Kilit.</h1>
           </div>
           <SidebarTrigger />
-        </header>
+        </SidebarHeader>
 
         <For
           each={menuConfig}
-          renderItem={(group) => (
+          renderItem={group => (
             <SidebarGroup key={group.label}>
               <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
               <SidebarGroupContent>

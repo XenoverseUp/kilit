@@ -1,10 +1,10 @@
-import { tanstackConfig } from '@tanstack/eslint-config'
+import { tanstackConfig } from "@tanstack/eslint-config"
 
 export default [
   ...tanstackConfig,
   {
     rules: {
-      'import/order': 'off',
+      "import/order": "off",
     },
   },
 ]
