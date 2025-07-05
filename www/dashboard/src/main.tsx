@@ -1,30 +1,31 @@
-import './index.css'
-import reportWebVitals from './reportWebVitals.ts'
-import { routeTree } from './routeTree.gen'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { createRoot } from 'react-dom/client'
+import "./index.css"
+import reportWebVitals from "./reportWebVitals.ts"
+import { routeTree } from "./routeTree.gen"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { RouterProvider, createRouter } from "@tanstack/react-router"
+import { createRoot } from "react-dom/client"
 
 const queryClient = new QueryClient()
 
 const router = createRouter({
   routeTree,
   context: { queryClient },
-  defaultPreload: 'intent',
+  defaultPreload: "intent",
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-  basepath: '/dashboard/',
-  trailingSlash: 'always',
+  basepath: "/dashboard/",
+  trailingSlash: "always",
+  defaultViewTransition: true,
 })
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router
   }
 }
 
-const rootElement = document.getElementById('app')!
+const rootElement = document.getElementById("app")!
 
 createRoot(rootElement).render(
   <QueryClientProvider client={queryClient}>
