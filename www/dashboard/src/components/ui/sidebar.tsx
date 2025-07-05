@@ -1,11 +1,4 @@
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { cva } from 'class-variance-authority'
-import { PanelLeftClose, PanelLeftIcon } from 'lucide-react'
-import type { VariantProps } from 'class-variance-authority'
-
-import { useIsMobile } from '@/hooks/use-mobile'
-import { cn } from '@/lib/utils'
+import { If } from '../common/if'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -23,6 +16,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
+import { PanelLeftClose, PanelLeftIcon } from 'lucide-react'
+import * as React from 'react'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -89,7 +89,7 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+    return isMobile ? setOpenMobile((s) => !s) : setOpen((s) => !s)
   }, [isMobile, setOpen, setOpenMobile])
 
   // Adds a keyboard shortcut to toggle the sidebar.
@@ -257,7 +257,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, open } = useSidebar()
+  const { toggleSidebar, openMobile, isMobile, open } = useSidebar()
 
   return (
     <Button
@@ -272,7 +272,11 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      {open ? <PanelLeftClose /> : <PanelLeftIcon />}
+      <If
+        condition={(isMobile && openMobile) || (!isMobile && open)}
+        renderItem={() => <PanelLeftClose />}
+        renderElse={() => <PanelLeftIcon />}
+      />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

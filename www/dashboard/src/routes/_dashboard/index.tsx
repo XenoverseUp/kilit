@@ -1,8 +1,8 @@
+import { Button } from '@/components/ui/button'
+import { userQueryOptions } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { userQueryOptions } from '@/lib/api'
-import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/_dashboard/')({
   component: App,
@@ -25,7 +25,9 @@ function App() {
         Count: <span className="font-semibold">{count}</span>
       </Button>
 
-      <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
+      <pre className="text-xs bg-accent border rounded-md overflow-hidden text-start p-6">
+        {JSON.stringify(data, null, 2)}
+      </pre>
 
       <Button asChild variant="link">
         <a href="/api/logout">Logout</a>

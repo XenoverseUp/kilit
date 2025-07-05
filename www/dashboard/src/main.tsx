@@ -1,12 +1,9 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { routeTree } from './routeTree.gen'
-
 import './index.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { routeTree } from './routeTree.gen'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { createRoot } from 'react-dom/client'
 
 const queryClient = new QueryClient()
 
@@ -17,7 +14,8 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-  basepath: '/dashboard',
+  basepath: '/dashboard/',
+  trailingSlash: 'always',
 })
 
 declare module '@tanstack/react-router' {
@@ -34,4 +32,4 @@ createRoot(rootElement).render(
   </QueryClientProvider>,
 )
 
-// reportWebVitals(console.log)
+reportWebVitals(console.log)

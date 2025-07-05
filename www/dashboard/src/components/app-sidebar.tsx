@@ -12,6 +12,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { Link } from '@tanstack/react-router'
+import For from 'common/for'
+import { If } from 'common/if'
 import {
   ChartNoAxesColumn,
   Cuboid,
@@ -95,30 +97,39 @@ export function AppSidebar() {
           <SidebarTrigger />
         </header>
 
-        {menuConfig.map((group) => (
-          <SidebarGroup key={group.label}>
-            <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map(({ to, icon: Icon, text, badge }) => (
-                  <SidebarMenuItem key={text}>
-                    <Link to={to}>
-                      {({ isActive }) => (
-                        <SidebarMenuButton isActive={isActive}>
-                          <Icon />
-                          <span>{text}</span>
-                          {badge && (
-                            <SidebarMenuBadge>{badge}</SidebarMenuBadge>
+        <For
+          each={menuConfig}
+          renderItem={(group) => (
+            <SidebarGroup key={group.label}>
+              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <For
+                    each={group.items}
+                    renderItem={({ to, icon: Icon, text, badge }) => (
+                      <SidebarMenuItem key={text}>
+                        <Link to={to}>
+                          {({ isActive }) => (
+                            <SidebarMenuButton isActive={isActive}>
+                              <Icon />
+                              <span>{text}</span>
+                              <If
+                                condition={!!badge}
+                                renderItem={() => (
+                                  <SidebarMenuBadge>{badge}</SidebarMenuBadge>
+                                )}
+                              />
+                            </SidebarMenuButton>
                           )}
-                        </SidebarMenuButton>
-                      )}
-                    </Link>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+                        </Link>
+                      </SidebarMenuItem>
+                    )}
+                  />
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
+        />
       </SidebarContent>
 
       <SidebarFooter>
