@@ -28,7 +28,7 @@ export const authRouter = new Hono()
 
     if (!result.success || !result.value.id) return c.redirect("/login")
 
-    await findOrCreateUser(result.value.id)
+    await findOrCreateUser(result.value)
 
     return c.redirect("/dashboard/")
   })
@@ -54,7 +54,7 @@ export const authRouter = new Hono()
       isAuthenticated: boolean
       user: {
         id: string
-        email: string | null
+        email: string
         firstName: string | null
         lastName: string | null
         picture: string | null

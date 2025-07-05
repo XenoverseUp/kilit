@@ -3,27 +3,28 @@ import { db } from "@lib/db"
 import { users } from "@lib/db/schema"
 
 export async function findOrCreateUser(
-  id: UserType["id"],
+  user: UserType,
   createPreferences?: Record<string, unknown>,
 ) {
-  const existingUser = await retrieveUser(id)
+  const existingUser = await retrieveUser(user.id)
   if (existingUser) return existingUser
 
-  const created = await createUser(id, createPreferences)
+  const created = await createUser(user, createPreferences)
 
   if (created.length > 0) return created[0]
 
-  return await retrieveUser(id)
+  return await retrieveUser(user.id)
 }
 
 export async function createUser(
-  id: UserType["id"],
+  user: UserType,
   preferences?: Record<string, unknown>,
 ) {
   return await db
     .insert(users)
     .values({
-      id,
+      id: user.id,
+      email: user.email,
       preferences: preferences ?? {},
     })
     .onConflictDoNothing()
