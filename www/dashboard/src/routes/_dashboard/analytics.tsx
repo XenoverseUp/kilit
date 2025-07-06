@@ -1,7 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_dashboard/analytics')({
+export const Route = createFileRoute("/_dashboard/analytics")({
   component: RouteComponent,
+  staticData: {
+    breadcrumb: "Analytics",
+  },
 })
 
 function RouteComponent() {

@@ -1,43 +1,47 @@
-import { useLocation } from "@tanstack/react-router"
+import { removeTrailingSlash } from "@/lib/utils"
+import { useRouter, useLocation, type Route } from "@tanstack/react-router"
 
-const urlMap: Record<string, { title: string; url: string }> = {
-  dashboard: {
-    title: "Dashboard",
+type BreadcrumbItem = {
+  title: string
+  url: string
+}
+
+export function useBreadcrumbs(): BreadcrumbItem[] {
+  const router = useRouter()
+  const location = useLocation()
+  const breadcrumbs: BreadcrumbItem[] = []
+
+  const { routesByPath, basepath } = router
+
+  const { pathname } = location
+
+  const route = routesByPath["/"]
+
+  breadcrumbs.push({
+    title: route.options.staticData!.breadcrumb as string,
     url: "/",
-  },
-  about: {
-    title: "About",
-    url: "/about",
-  },
-  "locked-links": {
-    title: "Locked Links",
-    url: "/locked-links",
-  },
-  analytics: {
-    title: "Analytics",
-    url: "/analytics",
-  },
-  forms: {
-    title: "Form Builder",
-    url: "/forms",
-  },
-  automation: {
-    title: "Automation",
-    url: "/automation",
-  },
-  settings: {
-    title: "Settings",
-    url: "/settings",
-  },
-}
+  })
 
-function getPaths(pathname: string) {
-  return pathname.split("/").filter(Boolean)
-}
+  const splittedPaths = pathname
+    .split("/")
+    .filter(Boolean)
+    .filter(p => !basepath.split("/").includes(p))
 
-export function useBreadcrumbs() {
-  const { pathname } = useLocation()
-  console.log(getPaths(pathname).map(path => urlMap[path].title))
+  let acc = ""
 
-  return getPaths(pathname).map(path => urlMap[path])
+  for (let path of splittedPaths) {
+    acc += `/${path}`
+
+    if (acc in routesByPath) {
+      // @ts-ignore
+      const route: Route = routesByPath[removeTrailingSlash(acc)]
+
+      breadcrumbs.push({
+        title: route.options.staticData!.breadcrumb as string,
+        url: acc,
+      })
+    }
+  }
+
+  return breadcrumbs
 }

@@ -3,6 +3,9 @@ import { createFileRoute, useSearch } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_dashboard/locked-links/create")({
   component: RouteComponent,
+  staticData: {
+    breadcrumb: "Create",
+  },
 })
 
 function RouteComponent() {

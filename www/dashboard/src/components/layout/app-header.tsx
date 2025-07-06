@@ -4,7 +4,7 @@ import { SidebarTrigger, useSidebar } from "../ui/sidebar"
 import AuthInfo from "./auth-info"
 import Breadcrumbs from "./breadcrumbs"
 import { If } from "common/if"
-import { LogOutIcon, SlashIcon } from "lucide-react"
+import { LogOutIcon } from "lucide-react"
 import { motion } from "motion/react"
 
 export default function AppHeader() {
@@ -18,7 +18,7 @@ export default function AppHeader() {
           renderItem={() => <SidebarTrigger />}
         />
         <motion.div layout="position" transition={{ duration: 0.15 }}>
-          <Breadcrumbs separator={SlashIcon} />
+          <Breadcrumbs />
         </motion.div>
       </motion.div>
       <div className="flex items-center gap-3">

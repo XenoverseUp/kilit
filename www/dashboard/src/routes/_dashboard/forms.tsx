@@ -1,7 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_dashboard/forms')({
+export const Route = createFileRoute("/_dashboard/forms")({
   component: RouteComponent,
+  staticData: {
+    breadcrumb: "Form Builder",
+  },
 })
 
 function RouteComponent() {
