@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Link } from "@tanstack/react-router"
 import For from "common/for"
@@ -34,13 +35,12 @@ const menuConfig = [
       {
         to: "/",
         icon: Home,
-        text: "Dashboard",
+        text: "Home",
       },
       {
         to: "/about",
         icon: Link2,
         text: "Locked Links",
-        badge: 5,
       },
       {
         to: "/analytics",
@@ -55,7 +55,7 @@ const menuConfig = [
       {
         to: "/forms",
         icon: LetterText,
-        text: "Forms",
+        text: "Form Templates",
       },
       {
         to: "/automation",
@@ -85,15 +85,16 @@ const footerConfig = [
 ]
 
 export function AppSidebar() {
+  const { open } = useSidebar()
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarHeader className="flex h-16 shrink-0 items-center justify-between pr-4 pl-6">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <Cuboid size={20} />
             <h1 className="text-lg font-medium">Kilit.</h1>
           </div>
-          <SidebarTrigger />
+          <If condition={open} renderItem={() => <SidebarTrigger />} />
         </SidebarHeader>
 
         <For
