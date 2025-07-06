@@ -1,7 +1,4 @@
-import PageHeader from "@/components/page-header"
-import { Button } from "@/components/ui/button"
-import { userQueryOptions } from "@/lib/api"
-import { useQuery } from "@tanstack/react-query"
+import { useAuth } from "@/hooks/use-auth"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_dashboard/")({
@@ -9,12 +6,11 @@ export const Route = createFileRoute("/_dashboard/")({
 })
 
 function App() {
-  const { isPending, error, data } = useQuery(userQueryOptions)
-
-  if (isPending) return <div>Loading...</div>
-  if (error) return <div>An Error occured</div>
+  const { user } = useAuth()
 
   return (
-    <div className="space-y-4 px-4 min-h-[calc(100%-calc(var(--spacing)*16))]"></div>
+    <div className="space-y-4 px-4 min-h-[calc(100%-calc(var(--spacing)*16))]">
+      {user.email}
+    </div>
   )
 }

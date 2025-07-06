@@ -22,7 +22,11 @@ export const userQueryOptions = queryOptions({
 
 /* Dashboard Query */
 
-async function getDashboardData() {}
+async function getDashboardData() {
+  const res = await api.user.dashboard.$get()
+  if (!res.ok) throw new Error("Server Error!")
+  return await res.json()
+}
 
 export const dashboardQueryOptions = queryOptions({
   queryKey: ["get-dashboard-data"],

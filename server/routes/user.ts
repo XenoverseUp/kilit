@@ -50,6 +50,15 @@ export const userRouter = new Hono()
   })
 
   /**
+   * Dashboard Data
+   */
+
+  .get("/dashboard", async c => {
+    const user = c.var.user
+    return c.json({})
+  })
+
+  /**
    * Locked Links
    */
 

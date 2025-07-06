@@ -1,6 +1,6 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
-import type { QueryClient } from '@tanstack/react-query'
-import { userQueryOptions } from '@/lib/api'
+import { userQueryOptions } from "@/lib/api"
+import type { QueryClient } from "@tanstack/react-query"
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router"
 
 interface Context {
   queryClient: QueryClient
@@ -11,8 +11,8 @@ const Component = () => {
   if (!isAuthenticated) {
     const isDev = import.meta.env.DEV
     const redirectUrl = isDev
-      ? 'http://localhost:4321/' // dev: Astro dev server
-      : '/' // prod: served by Hono
+      ? "http://localhost:4321/" // dev: Astro dev server
+      : "/" // prod: served by Hono
 
     window.location.href = redirectUrl
     return null

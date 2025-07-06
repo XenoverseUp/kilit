@@ -26,20 +26,14 @@ export default function Breadcrumbs({ separator: Separator }: Props) {
           each={crumbs}
           renderItem={(crumb, i) => (
             <Fragment key={crumb.url}>
+              <BreadcrumbSeparator>
+                {Separator && <Separator />}
+              </BreadcrumbSeparator>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link to={crumb.url}>{crumb.title}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-
-              <If
-                condition={i !== crumbs.length - 1}
-                renderItem={() => (
-                  <BreadcrumbSeparator>
-                    {Separator && <Separator />}
-                  </BreadcrumbSeparator>
-                )}
-              />
             </Fragment>
           )}
         />
