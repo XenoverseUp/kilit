@@ -64,25 +64,23 @@ const menuConfig = [
       },
     ],
   },
+]
+
+const footerConfig = [
   {
-    label: "Support",
-    items: [
-      {
-        to: "/settings",
-        icon: Settings,
-        text: "Settings",
-      },
-      {
-        to: "/security",
-        icon: Shield,
-        text: "Security",
-      },
-      {
-        to: "/help",
-        icon: HelpCircle,
-        text: "Help",
-      },
-    ],
+    to: "/settings",
+    icon: Settings,
+    text: "Settings",
+  },
+  {
+    to: "/security",
+    icon: Shield,
+    text: "Security",
+  },
+  {
+    to: "/help",
+    icon: HelpCircle,
+    text: "Help",
   },
 ]
 
@@ -134,9 +132,31 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <p className="text-muted-foreground pb-3 text-center text-xs">
+        <SidebarGroup className="pl-0">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <For
+                each={footerConfig}
+                renderItem={({ to, icon: Icon, text }) => (
+                  <SidebarMenuItem key={text}>
+                    <Link to={to}>
+                      {({ isActive }) => (
+                        <SidebarMenuButton isActive={isActive}>
+                          <Icon />
+                          <span>{text}</span>
+                        </SidebarMenuButton>
+                      )}
+                    </Link>
+                  </SidebarMenuItem>
+                )}
+              />
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* <p className="text-muted-foreground pb-3 text-center text-xs">
           Can Durmus &copy; {new Date().getFullYear()}
-        </p>
+        </p> */}
       </SidebarFooter>
     </Sidebar>
   )

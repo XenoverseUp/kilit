@@ -33,13 +33,18 @@ export const userRouter = new Hono()
     if (Object.entries(query).length === 0)
       return c.json({ message: "Nothing to update." }, 200)
 
-    const result = await db
-      .update(schema.users)
-      .set({
-        preferences: sql`COALESCE(${schema.users.preferences}, '{}'::jsonb) || ${sql.raw(`'${JSON.stringify(query)}'::jsonb`)}`,
-      })
-      .where(eq(schema.users.id, c.var.user.id))
-      .returning({ updatedId: schema.users.id })
+    const result = await attempt(
+      db
+        .update(schema.users)
+        .set({
+          preferences: sql`COALESCE(${schema.users.preferences}, '{}'::jsonb) || ${sql.raw(`'${JSON.stringify(query)}'::jsonb`)}`,
+        })
+        .where(eq(schema.users.id, c.var.user.id))
+        .returning({ updatedId: schema.users.id }),
+    )
+
+    if (!result.success)
+      return c.json({ message: "Preferences could not updated." }, 501)
 
     return c.json({ message: "Preferences updated." }, 201)
   })
@@ -50,18 +55,20 @@ export const userRouter = new Hono()
 
   // !TODO: Apply pagination to getLinks.
   .get("/links", async c => {
-    const links = await db
-      .select({
-        id: schema.links.id,
-        title: schema.links.title,
-        description: schema.links.description,
-        verificationMode: schema.links.verificationMode,
-        createdAt: schema.links.createdAt,
-      })
-      .from(schema.links)
-      .where(eq(schema.links.userId, c.var.user.id))
+    const result = await attempt(
+      db
+        .select({
+          id: schema.links.id,
+          title: schema.links.title,
+          description: schema.links.description,
+          verificationMode: schema.links.verificationMode,
+          createdAt: schema.links.createdAt,
+        })
+        .from(schema.links)
+        .where(eq(schema.links.userId, c.var.user.id)),
+    )
 
-    return c.json(links)
+    return c.json(result)
   })
 
   .post("/links", bCreateLinkValidator, async c => {

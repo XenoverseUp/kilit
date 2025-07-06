@@ -28,7 +28,7 @@ export const authRouter = new Hono()
 
     if (!result.success || !result.value.id) return c.redirect("/login")
 
-    await findOrCreateUser(result.value)
+    await attempt(findOrCreateUser(result.value))
 
     return c.redirect("/dashboard/")
   })
