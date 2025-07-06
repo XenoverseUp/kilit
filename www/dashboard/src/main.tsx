@@ -1,13 +1,14 @@
 import "./index.css"
 import reportWebVitals from "./reportWebVitals.ts"
 import { routeTree } from "./routeTree.gen"
+import "@fontsource-variable/bricolage-grotesque"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { RouterProvider, createRouter } from "@tanstack/react-router"
 import { createRoot } from "react-dom/client"
 
 const queryClient = new QueryClient()
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: { queryClient },
   defaultPreload: "intent",
@@ -15,7 +16,6 @@ const router = createRouter({
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
   basepath: "/dashboard/",
-  trailingSlash: "always",
   defaultViewTransition: true,
 })
 

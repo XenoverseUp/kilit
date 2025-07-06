@@ -17,7 +17,8 @@ import { Route as DashboardSettingsImport } from './routes/_dashboard/settings'
 import { Route as DashboardFormsImport } from './routes/_dashboard/forms'
 import { Route as DashboardAutomationImport } from './routes/_dashboard/automation'
 import { Route as DashboardAnalyticsImport } from './routes/_dashboard/analytics'
-import { Route as DashboardAboutImport } from './routes/_dashboard/about'
+import { Route as DashboardLockedLinksIndexImport } from './routes/_dashboard/locked-links/index'
+import { Route as DashboardLockedLinksCreateImport } from './routes/_dashboard/locked-links/create'
 
 // Create/Update Routes
 
@@ -56,11 +57,19 @@ const DashboardAnalyticsRoute = DashboardAnalyticsImport.update({
   getParentRoute: () => DashboardRoute,
 } as any)
 
-const DashboardAboutRoute = DashboardAboutImport.update({
-  id: '/about',
-  path: '/about',
+const DashboardLockedLinksIndexRoute = DashboardLockedLinksIndexImport.update({
+  id: '/locked-links/',
+  path: '/locked-links/',
   getParentRoute: () => DashboardRoute,
 } as any)
+
+const DashboardLockedLinksCreateRoute = DashboardLockedLinksCreateImport.update(
+  {
+    id: '/locked-links/create',
+    path: '/locked-links/create',
+    getParentRoute: () => DashboardRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -72,13 +81,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
-    }
-    '/_dashboard/about': {
-      id: '/_dashboard/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof DashboardAboutImport
-      parentRoute: typeof DashboardImport
     }
     '/_dashboard/analytics': {
       id: '/_dashboard/analytics'
@@ -115,27 +117,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof DashboardImport
     }
+    '/_dashboard/locked-links/create': {
+      id: '/_dashboard/locked-links/create'
+      path: '/locked-links/create'
+      fullPath: '/locked-links/create'
+      preLoaderRoute: typeof DashboardLockedLinksCreateImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/locked-links/': {
+      id: '/_dashboard/locked-links/'
+      path: '/locked-links'
+      fullPath: '/locked-links'
+      preLoaderRoute: typeof DashboardLockedLinksIndexImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface DashboardRouteChildren {
-  DashboardAboutRoute: typeof DashboardAboutRoute
   DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
   DashboardAutomationRoute: typeof DashboardAutomationRoute
   DashboardFormsRoute: typeof DashboardFormsRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardLockedLinksCreateRoute: typeof DashboardLockedLinksCreateRoute
+  DashboardLockedLinksIndexRoute: typeof DashboardLockedLinksIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAboutRoute: DashboardAboutRoute,
   DashboardAnalyticsRoute: DashboardAnalyticsRoute,
   DashboardAutomationRoute: DashboardAutomationRoute,
   DashboardFormsRoute: DashboardFormsRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardLockedLinksCreateRoute: DashboardLockedLinksCreateRoute,
+  DashboardLockedLinksIndexRoute: DashboardLockedLinksIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -144,55 +162,67 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof DashboardRouteWithChildren
-  '/about': typeof DashboardAboutRoute
   '/analytics': typeof DashboardAnalyticsRoute
   '/automation': typeof DashboardAutomationRoute
   '/forms': typeof DashboardFormsRoute
   '/settings': typeof DashboardSettingsRoute
   '/': typeof DashboardIndexRoute
+  '/locked-links/create': typeof DashboardLockedLinksCreateRoute
+  '/locked-links': typeof DashboardLockedLinksIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/about': typeof DashboardAboutRoute
   '/analytics': typeof DashboardAnalyticsRoute
   '/automation': typeof DashboardAutomationRoute
   '/forms': typeof DashboardFormsRoute
   '/settings': typeof DashboardSettingsRoute
   '/': typeof DashboardIndexRoute
+  '/locked-links/create': typeof DashboardLockedLinksCreateRoute
+  '/locked-links': typeof DashboardLockedLinksIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_dashboard': typeof DashboardRouteWithChildren
-  '/_dashboard/about': typeof DashboardAboutRoute
   '/_dashboard/analytics': typeof DashboardAnalyticsRoute
   '/_dashboard/automation': typeof DashboardAutomationRoute
   '/_dashboard/forms': typeof DashboardFormsRoute
   '/_dashboard/settings': typeof DashboardSettingsRoute
   '/_dashboard/': typeof DashboardIndexRoute
+  '/_dashboard/locked-links/create': typeof DashboardLockedLinksCreateRoute
+  '/_dashboard/locked-links/': typeof DashboardLockedLinksIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/about'
     | '/analytics'
     | '/automation'
     | '/forms'
     | '/settings'
     | '/'
+    | '/locked-links/create'
+    | '/locked-links'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/analytics' | '/automation' | '/forms' | '/settings' | '/'
+  to:
+    | '/analytics'
+    | '/automation'
+    | '/forms'
+    | '/settings'
+    | '/'
+    | '/locked-links/create'
+    | '/locked-links'
   id:
     | '__root__'
     | '/_dashboard'
-    | '/_dashboard/about'
     | '/_dashboard/analytics'
     | '/_dashboard/automation'
     | '/_dashboard/forms'
     | '/_dashboard/settings'
     | '/_dashboard/'
+    | '/_dashboard/locked-links/create'
+    | '/_dashboard/locked-links/'
   fileRoutesById: FileRoutesById
 }
 
@@ -220,17 +250,14 @@ export const routeTree = rootRoute
     "/_dashboard": {
       "filePath": "_dashboard.tsx",
       "children": [
-        "/_dashboard/about",
         "/_dashboard/analytics",
         "/_dashboard/automation",
         "/_dashboard/forms",
         "/_dashboard/settings",
-        "/_dashboard/"
+        "/_dashboard/",
+        "/_dashboard/locked-links/create",
+        "/_dashboard/locked-links/"
       ]
-    },
-    "/_dashboard/about": {
-      "filePath": "_dashboard/about.tsx",
-      "parent": "/_dashboard"
     },
     "/_dashboard/analytics": {
       "filePath": "_dashboard/analytics.tsx",
@@ -250,6 +277,14 @@ export const routeTree = rootRoute
     },
     "/_dashboard/": {
       "filePath": "_dashboard/index.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/locked-links/create": {
+      "filePath": "_dashboard/locked-links/create.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/locked-links/": {
+      "filePath": "_dashboard/locked-links/index.tsx",
       "parent": "/_dashboard"
     }
   }

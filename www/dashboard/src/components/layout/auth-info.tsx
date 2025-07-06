@@ -1,7 +1,7 @@
-import { IfValue } from "./common/if"
 import { userQueryOptions } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 import BoringAvatar from "boring-avatars"
+import { IfValue } from "common/if"
 
 export default function AuthInfo() {
   const { data, isPending, error } = useQuery(userQueryOptions)

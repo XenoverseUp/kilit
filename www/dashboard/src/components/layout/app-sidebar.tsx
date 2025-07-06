@@ -1,4 +1,3 @@
-import { Button } from "./ui/button"
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +10,6 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
@@ -40,7 +38,7 @@ const menuConfig = [
         text: "Home",
       },
       {
-        to: "/about",
+        to: "/locked-links",
         icon: Link2,
         text: "Locked Links",
       },
@@ -94,7 +92,7 @@ export function AppSidebar() {
         <SidebarHeader className="flex h-16 shrink-0 items-center justify-between pr-4 pl-6">
           <div className="flex items-center gap-2">
             <Cuboid size={20} />
-            <h1 className="text-lg font-medium">Kilit.</h1>
+            <h1 className="text-lg font-medium">kilit.</h1>
           </div>
           <If condition={open} renderItem={() => <SidebarTrigger />} />
         </SidebarHeader>

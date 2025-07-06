@@ -1,4 +1,4 @@
-import { Separator } from "./ui/separator"
+import { Separator } from "../ui/separator"
 import type { LucideIcon } from "lucide-react"
 import type { ReactNode } from "react"
 

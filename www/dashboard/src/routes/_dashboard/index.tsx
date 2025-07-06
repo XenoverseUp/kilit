@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth"
+import EmptyState from "@/components/compound/dashboard-empty"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_dashboard/")({
@@ -6,11 +6,9 @@ export const Route = createFileRoute("/_dashboard/")({
 })
 
 function App() {
-  const { user } = useAuth()
-
   return (
-    <div className="space-y-4 px-4 min-h-[calc(100%-calc(var(--spacing)*16))]">
-      {user.email}
-    </div>
+    <main className="space-y-4 p-4 min-h-[calc(100%-calc(var(--spacing)*16))] h-px">
+      <EmptyState />
+    </main>
   )
 }
