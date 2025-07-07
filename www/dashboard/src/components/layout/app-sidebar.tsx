@@ -106,19 +106,13 @@ export function AppSidebar() {
                 <SidebarMenu>
                   <For
                     each={group.items}
-                    renderItem={({ to, icon: Icon, text, badge }) => (
+                    renderItem={({ to, icon: Icon, text }) => (
                       <SidebarMenuItem key={text}>
                         <Link to={to}>
                           {({ isActive }) => (
                             <SidebarMenuButton isActive={isActive}>
                               <Icon />
                               <span>{text}</span>
-                              <If
-                                condition={!!badge}
-                                renderItem={() => (
-                                  <SidebarMenuBadge>{badge}</SidebarMenuBadge>
-                                )}
-                              />
                             </SidebarMenuButton>
                           )}
                         </Link>

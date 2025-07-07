@@ -18,7 +18,7 @@ export function useBreadcrumbs(): BreadcrumbItem[] {
   const route = routesByPath["/"]
 
   breadcrumbs.push({
-    title: route.options.staticData!.breadcrumb as string,
+    title: route.options.staticData.breadcrumb,
     url: "/",
   })
 
@@ -37,7 +37,7 @@ export function useBreadcrumbs(): BreadcrumbItem[] {
       const route: Route = routesByPath[removeTrailingSlash(acc)]
 
       breadcrumbs.push({
-        title: route.options.staticData!.breadcrumb as string,
+        title: route.options.staticData.breadcrumb,
         url: acc,
       })
     }

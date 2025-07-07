@@ -24,7 +24,7 @@ declare module "@tanstack/react-router" {
     router: typeof router
   }
   interface StaticDataRouteOption {
-    breadcrumb?: string
+    breadcrumb: string
   }
 }
 
